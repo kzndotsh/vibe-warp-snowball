@@ -1,0 +1,34 @@
+# Git attributes configuration
+
+# Mark .cmd files as not being batch files (but kernel build .cmd files should be ignored)
+*.cmd -linguist-detectable linguist-language=Shell
+*.cmd text eol=lf
+
+# Kernel build system .cmd files should be treated as generated
+.*.cmd linguist-generated binary
+
+# Ensure shell scripts are properly detected
+*.sh linguist-language=Shell
+*.bash linguist-language=Shell
+
+# Kernel module files
+*.c linguist-language=C
+*.ko binary
+*.mod binary
+*.symvers linguist-generated
+*.order linguist-generated
+
+# Python files
+*.py linguist-language=Python
+
+# Documentation
+*.md linguist-documentation
+*.txt linguist-documentation
+
+# Docker files
+Dockerfile linguist-language=Dockerfile
+*.dockerfile linguist-language=Dockerfile
+
+# Makefiles
+Makefile linguist-language=Makefile
+*.mk linguist-language=Makefile
