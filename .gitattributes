@@ -24,6 +24,7 @@
 # Documentation
 *.md linguist-documentation
 *.txt linguist-documentation
+LICENSE linguist-documentation
 
 # Docker files
 Dockerfile linguist-language=Dockerfile
