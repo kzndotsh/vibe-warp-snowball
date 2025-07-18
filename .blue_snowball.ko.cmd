@@ -1,0 +1,1 @@
+savedcmd_blue_snowball.ko := ld -r -m elf_x86_64 -z noexecstack --no-warn-rwx-segments --build-id=sha1  -T /usr/lib/modules/6.15.6-zen1-1-zen/build/scripts/module.lds -o blue_snowball.ko blue_snowball.o blue_snowball.mod.o .module-common.o

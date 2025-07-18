@@ -1,0 +1,50 @@
+obj-m += blue_snowball.o
+
+# Try to find a suitable kernel build directory
+KERNEL_VERSION ?= $(shell uname -r)
+KDIR_PRIMARY := /lib/modules/$(KERNEL_VERSION)/build
+KDIR_FALLBACK := $(shell find /lib/modules -name "build" -type d | head -1)
+
+# Use primary if it exists, otherwise use fallback
+ifeq ($(wildcard $(KDIR_PRIMARY)),)
+    KDIR := $(KDIR_FALLBACK)
+    $(warning Using fallback kernel directory: $(KDIR))
+else
+    KDIR := $(KDIR_PRIMARY)
+endif
+
+PWD := $(shell pwd)
+
+all:
+	@echo "Building Blue Snowball driver with kernel directory: $(KDIR)"
+	$(MAKE) -C $(KDIR) M=$(PWD) modules
+
+clean:
+	$(MAKE) -C $(KDIR) M=$(PWD) clean
+	rm -f *.o *.ko *.mod.c *.mod *.symvers *.order
+
+install:
+	$(MAKE) -C $(KDIR) M=$(PWD) modules_install
+	depmod -a
+
+uninstall:
+	rm -f /lib/modules/$(KERNEL_VERSION)/extra/blue_snowball.ko
+	depmod -a
+
+load:
+	insmod blue_snowball.ko
+
+unload:
+	rmmod blue_snowball || true
+
+reload: unload load
+
+test: all
+	./test_suite.sh
+
+info:
+	@echo "Kernel version: $(KERNEL_VERSION)"
+	@echo "Kernel directory: $(KDIR)"
+	@echo "Build directory exists: $(shell test -d $(KDIR) && echo yes || echo no)"
+
+.PHONY: all clean install uninstall load unload reload test info
